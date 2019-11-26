@@ -36,8 +36,9 @@ public class ICanWin {
         Thread.sleep(2000);
 
         String actualCode = driver.findElement(By.xpath("//*/td/div[@class='paste']")).getText();
-        Assert.assertTrue(actualCode.contains(code));
-       driver.quit();
+        Assert.assertTrue(actualCode.contains(code),"Code is wrong - failed");
+        System.out.print("Code is correct!");
+        driver.quit();
     }
 
 }
