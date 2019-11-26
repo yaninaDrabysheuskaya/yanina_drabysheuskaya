@@ -1,0 +1,43 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+
+import java.util.List;
+
+public class ICanWin {
+    public static void main(String[] args) throws InterruptedException {
+
+        //no remote webdriver run during this demo
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://paste.ubuntu.com/");
+
+        String code = "git config --global user.name  \"New Sheriff in Town\"\n" +
+                "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
+                "git push origin master --force";
+        String poster = "YaniD";
+
+        WebElement newPaste = driver.findElement(By.id("id_content"));
+        newPaste.sendKeys(code);
+
+        WebElement pastePoster = driver.findElement(By.id("id_poster"));
+        pastePoster.sendKeys(poster);
+
+        Select pasteSyntax = new Select(driver.findElement(By.name("syntax")));
+        pasteSyntax.selectByVisibleText("Bash");
+
+        Select pasteExpiration = new Select(driver.findElement(By.name("expiration")));
+        pasteExpiration.selectByVisibleText("A day");
+
+        WebElement submitButton = driver.findElement(By.xpath("//input[@value='Paste!']"));
+        submitButton.click();
+        Thread.sleep(2000);
+
+        String actualCode = driver.findElement(By.xpath("//*/td/div[@class='paste']")).getText();
+        Assert.assertTrue(actualCode.contains(code));
+       driver.quit();
+    }
+
+}
